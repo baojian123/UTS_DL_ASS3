@@ -1,0 +1,14 @@
+.DS_Store
+Kaggle_Dataset/
+AUC_Dataset/
+state-farm-distracted-driver-detection.zip
+/dist/
+
+# Editor directories and files
+.zip
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
