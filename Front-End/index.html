@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="gui_style.css">
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios@0.19.2/dist/axios.min.js"></script>
+	<title>Assignment 3</title>
+</head>
+<body>
+	<div id="app">
+		<table>
+			<tr>
+				<td class="big-col">
+					<div class="gray-container" style="margin-left:50px">
+						<table>
+							<tr>
+									<h6>File Inputer</h6>
+									<td style="width:40px"></td>
+									<td>
+										<input type="file" id="img" name="img" accept="image/*" id="input_file" @change="get_img($event)">
+									</td>
+									<td>
+										<button @click="upload($event)">Analyse Image</button>
+									</td>
+							</tr>
+						</table>
+							<div class="white-holder" >
+								<div v-for="i in Object.keys(imgs)" @click="select(i)" class="img-item":class=" {selected: selected_idx==i}" style="width:100%;">{{imgs[i].name}}</div>
+							</div>
+							<!-- <div class="button-holder">
+								<button>Button1</button>
+								<button>Button2</button>
+							</div> -->
+					</div>
+				</td>
+				<!-- <td class="small-col">
+					<div class="button-holder">
+						<button class="center-button">Start</button><br>
+						<button class="center-button">End</button>
+					</div>
+				</td> -->
+				<td class="big-col">
+					<div class="gray-container" id="img-holder">
+						<h6>Image Preview</h6>
+						<div class="white-holder" style="margin-top:30px">
+							<img style="height:100%" :src="preview_url" alt="">
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<div>
+			<h5>Predictied Result</h5>
+			<div id="bottom-white-holder">
+				<div>Prediction: {{prediction}}</div>
+				<div v-for="item in Object.keys(result)">{{item}}:{{result[item]*100}}%</div>
+			</div>
+		</div>
+	</div>
+		<script>
+			new Vue({
+				el:'#app',
+				data () {
+					return {
+						model:'InceptionV3',
+						imgs:[{
+							img:'',
+							url:'',
+							distri:{}
+						}],
+						selected_idx:-1,
+						uploaded_img:'',
+						preview_url:'',
+						prediction:'',
+						result:{
+							// "Drinking":0.0,
+							// "Hair and makeup":0.0,
+							// "Operating the radio":0.0,
+							// "Reaching behind":0.0,
+							// "Safe driving":0.0,
+							// "Talking on the phone - left":0.0,
+							// "Talking on the phone - right":0.0,
+							// "Talking to passenger":0.0,
+							// "Texting - left":0.0,
+							// "Texting - right":0.0
+						}
+					}
+				},
+				methods:{
+					get_img(event){
+						this.uploaded_img = event.target.files[0]
+						// this.preview_url = URL.createObjectURL(this.selected_img)
+					},
+					select(idx){
+						this.selected_idx = idx
+						this.result = this.imgs[idx].distri
+						this.preview_url = this.imgs[idx].url
+						this.prediction = this.imgs[idx].prediction
+					},
+					check_img(filename){
+						for( var i in this.imgs){
+							if(this.imgs[i].name==filename){
+								return false;
+							}
+						}
+						return true;
+					},
+					upload(event){
+						event.preventDefault()
+						let formData = new FormData()
+						formData.append("model",this.model)
+						formData.append("image",this.uploaded_img)
+						const self = this
+
+						let config = {
+							headers: {
+								'Content-Type': 'multipart/form-data'
+							}
+						}
+						if(this.check_img(this.uploaded_img.name)){
+							axios.post('http://127.0.0.1:5000/upload', formData, config)
+							.then(function(response){
+								var img={}
+								img.name = self.uploaded_img.name
+								img.url = URL.createObjectURL(self.uploaded_img);
+								img.distri = response.data.distribution
+								img.prediction = response.data.result
+								idx=self.imgs.push(img)-1
+								self.select(idx)
+								// self.result = response.data
+							})
+						}else{
+							alert("This image exists, please select another image.")
+						}
+
+					}
+				},
+				mounted () {
+				}
+			})
+		</script>
+</body>
+</html>

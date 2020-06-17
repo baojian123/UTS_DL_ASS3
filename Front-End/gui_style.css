@@ -1,0 +1,65 @@
+.gray-container {
+	background-color: gray;
+	width:600px;
+	height: 440px;
+}
+
+.white-holder {
+	background-color: white;
+	width: 80%;
+	height: 360px;
+	margin: auto;
+	border: 1px solid black;
+}
+
+form {
+	margin-left: 10px;
+}
+
+table {
+	width: 100%;
+}
+
+.big-col {
+	width: 45%;
+}
+
+.small-col {
+	width: 10%;
+}
+
+h6{
+	margin: 0;
+	font-size: 20px;
+	text-align: center;
+	color:white;
+}
+
+h5{
+	margin: 0;
+	font-size: 20px;
+	text-align: center;
+}
+
+.button-holder {
+	text-align: center;
+}
+
+.center-button {
+    margin-bottom: 20px;
+    width: 80%;
+}
+.img-item{
+	align:center;
+	font-size: 17px;
+}
+.selected{
+	background-color: #3498db;
+}
+#bottom-white-holder {
+	background-color: white;
+	width: 50%;
+	height: 250px;
+	margin: auto;
+	border: 1px solid black;
+}

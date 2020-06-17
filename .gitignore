@@ -5,6 +5,7 @@ state-farm-distracted-driver-detection.zip
 /dist/
 
 # Editor directories and files
+.hdf5
 .zip
 .idea
 .vscode
