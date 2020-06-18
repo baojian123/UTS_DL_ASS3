@@ -1,0 +1,6 @@
+# cat requirements.txt 
+tensorflow>=2.2
+flask>=1.1.1
+flask_cors>=3.0.8
+opencv-python>=4.2.0.34
+werkzeug>=0.15.4
